@@ -62,6 +62,23 @@
     }
     return go(2);
   }
+  /* Campaign invitation link: a hashed token carried by the link (?g=...) turns on guest
+   * access by itself, so no code is shown or typed. Kept for this browser tab only. */
+  var LINK_HASHES = ['914d6f92b2584c6ed280ee91884ff70aa17809448de5c43a4aa24b41b63c1778'];
+  (function () {
+    var tok = '';
+    try {
+      var m = /(?:^|[?&])g=([A-Za-z0-9]{6,40})(?:&|$)/.exec(location.search);
+      if (m) { tok = m[1]; sessionStorage.setItem('lla_guest_link', tok); }
+      else tok = sessionStorage.getItem('lla_guest_link') || '';
+    } catch (e) {}
+    if (!tok) return;
+    sha256(tok).then(function (hx) {
+      if (LINK_HASHES.indexOf(hx) === -1 || Date.now() >= EXPIRES_AT) return;
+      active = 'INVITELINK'; reflect();
+      setInterval(function () { if (active) reflect(); }, 400);
+    });
+  })();
   var busy = false;
   document.addEventListener('click', function (ev) {
     var t = ev.target && ev.target.closest ? ev.target.closest('#emApply, #emGo2') : null;
