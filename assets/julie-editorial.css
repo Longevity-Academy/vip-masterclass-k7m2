@@ -1,0 +1,110 @@
+/* Two LLA offers (Standard, VIP), one horizontal desktop fold. Blueprint card removed 24 Sep 2026 (Omri). */
+#pricing.editorial-pricing{background:#fff;color:#0a2542;padding:76px 0 58px;overflow:hidden}
+.editorial-pricing .offer-shell{max-width:1480px;padding:0 48px;margin:auto}
+.editorial-pricing .offer-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:42px}
+.editorial-pricing h2,.editorial-pricing h3{font-family:"Playfair Display",Georgia,serif;font-weight:400;letter-spacing:-.04em;color:#0a2542}
+.editorial-pricing h2{font-size:clamp(44px,4.4vw,70px);line-height:1.08;margin:0}
+.editorial-pricing h2 em,.editorial-pricing h3 em{font-family:inherit;font-weight:400;font-style:italic}
+.editorial-pricing h2 em{color:#006eff}
+.editorial-pricing .offer-heading>p{font-size:17px;line-height:1.65;max-width:340px;margin:0 0 5px;color:#45627d}
+.editorial-pricing .offer-composition{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+.editorial-pricing .offer-card{position:relative;display:flex;flex-direction:column;min-width:0;padding:34px 32px 26px;border-radius:18px;overflow:hidden;isolation:isolate}
+.editorial-pricing .offer-standard{background:#fff;border:1px solid #cdddeb;box-shadow:0 18px 42px -30px #14457750}
+.editorial-pricing .offer-standard:before{content:"";position:absolute;top:0;left:32px;right:32px;height:3px;background:#5eb6ff}
+.editorial-pricing .offer-vip{background:radial-gradient(ellipse at 110% -10%,#5eb6ff88,transparent 57%),linear-gradient(145deg,#006eff,#0059d4);color:#fff;border:1px solid #237bfa;box-shadow:0 20px 45px -24px #006eff88}
+.editorial-pricing .offer-vip:before{content:"";position:absolute;width:310px;height:310px;right:-205px;top:70px;border:1px solid #ffffff26;border-radius:50%;box-shadow:0 0 0 36px #ffffff06,0 0 0 75px #ffffff04;z-index:-1}
+.editorial-pricing .offer-blueprint{background:radial-gradient(ellipse at 110% 10%,#b7dfff 0,transparent 62%),#edf6ff;border:1px solid #c1ddf5;box-shadow:0 18px 42px -30px #14457750}
+.editorial-pricing .offer-topline{display:flex;justify-content:space-between;gap:12px;font-size:15px;font-weight:500;line-height:1.5;color:#46647d;margin-bottom:30px}
+.editorial-pricing h3{font-size:clamp(34px,3vw,46px);line-height:1.12;min-height:104px;margin:0 0 20px}
+.editorial-pricing .offer-copy{font-size:17px;line-height:1.65;min-height:58px;margin:0 0 25px;color:#3f5b73}
+.editorial-pricing .offer-price{display:flex;align-items:baseline;gap:16px;min-height:80px;margin:0 0 5px;color:#0a2542}
+.editorial-pricing .offer-price strong{font-family:Inter,sans-serif;font-size:clamp(54px,4.5vw,72px);font-weight:500;line-height:1.05;letter-spacing:-.065em}
+.editorial-pricing .offer-price s{font-size:22px;font-weight:400;color:#657e91;letter-spacing:-.02em}
+.editorial-pricing .offer-price>span{font:italic 30px/1.2 "Playfair Display",Georgia,serif;white-space:nowrap}
+.editorial-pricing .offer-terms{font-size:15px;line-height:1.6;margin:0 0 28px;color:#46647d}
+.editorial-pricing .offer-benefit{min-height:121px;padding-top:22px;border-top:1px solid #bcd0df;margin-bottom:24px}
+.editorial-pricing .offer-benefit>strong{font-size:18px;font-weight:600;line-height:1.5;display:block;color:#163f62;margin:0 0 8px}
+.editorial-pricing .offer-benefit p{font-size:16px;line-height:1.65;color:#46647d;margin:0}
+.editorial-pricing .offer-promo{padding:18px 18px 15px;border:0;background:#fff9;border-radius:10px;box-shadow:inset 0 1px 0 #fff;margin-top:-5px;min-height:126px}
+.editorial-pricing .offer-promo p{font-size:15px}
+.editorial-pricing .offer-promo>strong{font-size:25px;letter-spacing:-.025em;margin:3px 0}
+.editorial-pricing .offer-promo strong span{font-size:15px;font-weight:500;white-space:nowrap;letter-spacing:0}
+.editorial-pricing .offer-promo b{font-weight:700;color:#0057cc}
+.editorial-pricing .offer-action{margin-top:auto}
+.editorial-pricing .offer-button{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:57px;padding:16px 20px;border-radius:8px;background:#006eff;color:#fff;font-size:16px;font-weight:600;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.editorial-pricing .offer-button>span:last-child{font-size:24px;font-weight:400;line-height:1}
+.editorial-pricing .offer-button:hover{transform:translateY(-2px);box-shadow:0 10px 24px #004cba26}
+.editorial-pricing .offer-button:focus-visible,.editorial-pricing summary:focus-visible{outline:3px solid #5eb6ff;outline-offset:4px}
+.editorial-pricing .offer-blueprint .offer-button{background:#10385f}
+.editorial-pricing .offer-bottom{text-align:center;font-size:15px;line-height:1.6;color:#46647d;margin:14px 0 0}
+.editorial-pricing .offer-details{margin-top:21px;padding-top:16px;border-top:1px solid #bed0df}
+.editorial-pricing summary{display:flex;align-items:center;justify-content:space-between;font-size:15px;line-height:1.5;color:#345773;cursor:pointer;list-style:none}
+.editorial-pricing summary::-webkit-details-marker{display:none}
+.editorial-pricing summary>span{font-size:23px;font-weight:400;line-height:1}
+.editorial-pricing details[open] summary>span{transform:rotate(45deg)}
+.editorial-pricing details p{font-size:16px;line-height:1.7;margin:15px 0 0;color:#3f5b73}
+.editorial-pricing .offer-vip h3,.editorial-pricing .offer-vip .offer-price,.editorial-pricing .offer-vip .offer-benefit>strong{color:#fff}
+.editorial-pricing .offer-vip .offer-topline,.editorial-pricing .offer-vip .offer-copy,.editorial-pricing .offer-vip .offer-terms,.editorial-pricing .offer-vip .offer-benefit p,.editorial-pricing .offer-vip .offer-bottom,.editorial-pricing .offer-vip summary,.editorial-pricing .offer-vip details p,.editorial-pricing .offer-vip .offer-price s{color:#e2f0ff}
+.editorial-pricing .offer-vip .offer-benefit,.editorial-pricing .offer-vip .offer-details{border-color:#ffffff4d}
+.editorial-pricing .offer-vip .offer-button{background:#fff;color:#005ad4;box-shadow:0 8px 22px #00378530}
+.editorial-pricing .offer-dates{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:30px;color:#45627d;font-size:15px;line-height:1.6}
+.editorial-pricing .offer-dates>span{font:italic 24px "Playfair Display",Georgia,serif;color:#173c5c}
+.editorial-pricing .offer-dates p{margin:0;font-size:16px}
+.editorial-pricing .offer-dates p span{margin:0 10px;color:#6e8598}
+.editorial-pricing .offer-dates a{color:#005dcc;text-decoration:none;border-bottom:1px solid #a2c3e0}
+@media(min-width:801px) and (max-width:1100px){.editorial-pricing .offer-shell{padding:0 24px}.editorial-pricing .offer-composition{gap:14px}.editorial-pricing .offer-card{padding:28px 22px 24px}.editorial-pricing h3{font-size:34px;min-height:80px}.editorial-pricing .offer-copy{font-size:16px;min-height:80px}.editorial-pricing .offer-price strong{font-size:56px}.editorial-pricing .offer-price{min-height:66px;gap:12px}.editorial-pricing .offer-benefit{min-height:166px}.editorial-pricing .offer-promo strong span{display:block}.editorial-pricing .offer-topline{font-size:15px;flex-wrap:wrap;gap:4px;min-height:44px}.editorial-pricing .offer-button{padding:15px 12px;font-size:15px}}
+@media(max-width:800px){#pricing.editorial-pricing{padding:48px 0 40px}.editorial-pricing .offer-shell{padding:0 20px}.editorial-pricing .offer-heading{display:block;margin-bottom:30px}.editorial-pricing h2{font-size:49px}.editorial-pricing .offer-heading>p{font-size:17px;margin-top:18px;max-width:350px}.editorial-pricing .offer-composition{grid-template-columns:1fr;gap:20px}.editorial-pricing .offer-card{padding:30px 26px 24px}.editorial-pricing h3{font-size:43px;min-height:0;margin-bottom:18px}.editorial-pricing .offer-copy{min-height:0;font-size:17px}.editorial-pricing .offer-topline{margin-bottom:25px}.editorial-pricing .offer-price strong{font-size:66px}.editorial-pricing .offer-price{min-height:75px}.editorial-pricing .offer-benefit{min-height:0;margin-bottom:28px}.editorial-pricing .offer-promo strong span{display:block}.editorial-pricing .offer-dates{display:block;margin-top:30px}.editorial-pricing .offer-dates p{margin:14px 0 18px;font-size:16px}.editorial-pricing .offer-dates p span{display:block;margin:5px 0}.editorial-pricing .offer-button{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.editorial-pricing *{transition:none!important}}
+/* Readability correction: exact package names, prominent billing, stronger LLA gradients. */
+#pricing.editorial-pricing{padding:64px 0 54px;background:linear-gradient(180deg,#fff,#f0f7ff)}
+.editorial-pricing .offer-shell{max-width:1720px;padding:0 48px}
+.editorial-pricing .offer-heading{margin-bottom:38px}
+.editorial-pricing .offer-heading>p{font-size:21px;max-width:465px}
+.editorial-pricing .offer-composition{gap:24px}
+.editorial-pricing .offer-card{padding:38px 32px 30px;border-radius:24px}
+.editorial-pricing .offer-standard{background:radial-gradient(ellipse at 110% 95%,#89c5ff88,transparent 64%),linear-gradient(150deg,#fff 8%,#f2f9ff 50%,#b8ddff);border:1px solid #c1ddf5;box-shadow:0 20px 48px -28px #006eff55}
+.editorial-pricing .offer-standard:before{height:4px;background:linear-gradient(90deg,#006eff,#5eb6ff)}
+.editorial-pricing .offer-vip{background:radial-gradient(ellipse at 110% 0,#399fff77,transparent 52%),linear-gradient(145deg,#003fae 0%,#006eff 52%,#004dca 100%);border:1px solid #468bff;box-shadow:0 24px 52px -24px #006eff88}
+.editorial-pricing .offer-blueprint{background:radial-gradient(ellipse at 100% 100%,#006eff55,transparent 68%),linear-gradient(145deg,#ecf8ff 0%,#acdfff 42%,#80c2ff 100%);border:1px solid #86bdec;box-shadow:0 20px 48px -28px #006eff66}
+.editorial-pricing .offer-topline{font-size:19px;margin-bottom:28px}
+.editorial-pricing h3{font-size:clamp(42px,3.5vw,60px);line-height:1.1;min-height:136px;letter-spacing:-.045em;margin-bottom:23px}
+.editorial-pricing .offer-copy{font-size:22px;line-height:1.55;min-height:138px;margin-bottom:24px}
+.editorial-pricing .offer-copy strong{font-weight:650;color:inherit}
+.editorial-pricing .offer-price{min-height:103px;align-items:baseline;gap:18px;white-space:nowrap;margin-bottom:10px}
+.editorial-pricing .offer-price strong{font-size:clamp(72px,6vw,98px);line-height:1;font-weight:600;letter-spacing:-.065em}
+.editorial-pricing .offer-price s{font-size:29px}
+.editorial-pricing .offer-price>span{font:600 clamp(40px,3.8vw,62px)/1 Inter,sans-serif;letter-spacing:-.055em;color:#0a2542}
+.editorial-pricing .offer-terms{font-size:20px;line-height:1.55;min-height:62px;margin-bottom:24px;color:#244968}
+.editorial-pricing .offer-benefit{min-height:157px;padding-top:24px;margin-bottom:30px}
+.editorial-pricing .offer-benefit>strong{font-size:25px;line-height:1.35;margin-bottom:10px}
+.editorial-pricing .offer-benefit p{font-size:20px;line-height:1.55;color:#244968}
+.editorial-pricing .offer-promo{padding:19px 20px;min-height:162px;background:#ffffffe0;box-shadow:0 8px 22px #006eff12}
+.editorial-pricing .offer-promo p{font-size:18px}
+.editorial-pricing .offer-promo>strong{font-size:36px;line-height:1.25;letter-spacing:-.04em;margin:8px 0}
+.editorial-pricing .offer-promo strong span{display:block;font-size:20px;line-height:1.45;letter-spacing:0;margin-top:5px}
+.editorial-pricing .offer-button{font-size:21px;padding:21px 22px;min-height:70px;border-radius:10px}
+.editorial-pricing .offer-button>span:last-child{font-size:30px}
+.editorial-pricing .offer-bottom{font-size:18px;min-height:56px;color:#244968}
+.editorial-pricing summary{font-size:19px}
+.editorial-pricing details p{font-size:19px}
+.editorial-pricing .offer-dates{font-size:18px;margin-top:32px}
+.editorial-pricing .offer-dates p{font-size:19px}
+.editorial-pricing .offer-vip .offer-terms,.editorial-pricing .offer-vip .offer-benefit p,.editorial-pricing .offer-vip .offer-bottom{color:#edf6ff}
+@media(min-width:801px) and (max-width:1300px){.editorial-pricing .offer-shell{padding:0 24px}.editorial-pricing .offer-composition{gap:18px}.editorial-pricing .offer-card{padding:30px 25px 26px}.editorial-pricing h3{font-size:44px;min-height:108px}.editorial-pricing .offer-copy{font-size:20px;min-height:155px}.editorial-pricing .offer-topline{font-size:17px;flex-wrap:wrap;min-height:50px}.editorial-pricing .offer-price strong{font-size:76px}.editorial-pricing .offer-price>span{font-size:46px}.editorial-pricing .offer-price{gap:12px;min-height:88px}.editorial-pricing .offer-terms{font-size:18px}.editorial-pricing .offer-benefit{min-height:214px}.editorial-pricing .offer-benefit>strong{font-size:23px}.editorial-pricing .offer-benefit p{font-size:19px}.editorial-pricing .offer-promo>strong{font-size:33px}.editorial-pricing .offer-button{font-size:19px;padding:18px 15px}.editorial-pricing .offer-bottom{font-size:17px}}
+@media(max-width:800px){#pricing.editorial-pricing{padding:42px 0}.editorial-pricing .offer-shell{padding:0 18px}.editorial-pricing .offer-heading>p{font-size:20px}.editorial-pricing .offer-card{padding:32px 25px 28px}.editorial-pricing h3{font-size:47px;line-height:1.12;min-height:0;margin-bottom:24px}.editorial-pricing .offer-topline{font-size:18px;gap:10px;flex-wrap:wrap}.editorial-pricing .offer-copy{font-size:21px;min-height:0;margin-bottom:28px}.editorial-pricing .offer-price strong{font-size:78px}.editorial-pricing .offer-price>span{font-size:47px}.editorial-pricing .offer-price{min-height:89px;gap:12px}.editorial-pricing .offer-price s{font-size:27px}.editorial-pricing .offer-terms{font-size:19px;min-height:0;margin-bottom:26px}.editorial-pricing .offer-benefit{min-height:0;margin-bottom:28px}.editorial-pricing .offer-benefit>strong{font-size:25px}.editorial-pricing .offer-benefit p{font-size:20px}.editorial-pricing .offer-promo>strong{font-size:36px}.editorial-pricing .offer-promo p{font-size:18px}.editorial-pricing .offer-promo strong span{font-size:21px}.editorial-pricing .offer-button{font-size:20px;padding:20px 17px;min-height:68px}.editorial-pricing .offer-bottom{font-size:18px;min-height:0}.editorial-pricing summary{font-size:19px}.editorial-pricing .offer-dates p{font-size:18px}}
+
+/* Two-card fold (24 Sep 2026): centred pair, no over-wide cards. */
+.editorial-pricing .offer-shell{max-width:1240px}
+.editorial-pricing .offer-composition{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+@media(max-width:800px){.editorial-pricing .offer-composition{grid-template-columns:1fr}}
+
+/* 2026-09-24: three-bullet benefit list on both pricing cards */
+.offer-benefit{min-height:0}
+.offer-bullets{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.offer-bullets li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
+.offer-bullets svg{width:22px;height:22px;margin-top:2px;color:#006eff}
+.offer-bullets strong{font-size:17px;font-weight:600;line-height:1.4;display:block;color:#163f62;margin:0 0 2px}
+.offer-bullets p{font-size:15px;line-height:1.55;color:#46647d;margin:0}
+.editorial-pricing .offer-vip .offer-bullets strong{color:#fff}
+.editorial-pricing .offer-vip .offer-bullets p{color:#e2f0ff}
+.editorial-pricing .offer-vip .offer-bullets svg{color:#bfe0ff}
