@@ -39,6 +39,7 @@
     if (ps[0]) ps[0].textContent = 'Your guest seat for the Longevity Masterclass with Julie Gibson Clark is reserved. No payment is due. Your Zoom access details will be sent to ' + $('emEmail').value + ' before the session.';
     var ref = $('ckReceiptReference');
     if (ref) ref.textContent = 'Order #' + (ids.orderid || '') + ' · ' + (plan.course_name || 'Longevity Masterclass') + ' · ' + ($('emDate') || {}).value;
+    try { if (ref && sessionStorage.getItem('lla_member_id') && ids.stid) ref.textContent += ' · Member ID ' + ids.stid; } catch (e) {}
     ['ckVipCoupon', 'ckCourseLink'].forEach(function (id) { var el = $(id); if (el) el.style.display = 'none'; });
     m.classList.remove('open'); order.style.display = 'none'; done.style.display = 'block';
     ck.style.display = 'block'; document.body.style.overflow = 'hidden'; ck.scrollTop = 0;
