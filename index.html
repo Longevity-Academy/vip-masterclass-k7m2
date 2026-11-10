@@ -2555,6 +2555,8 @@ window.LLA_ECOMM_CONFIG.crmCourse = { mainAbroadCourseId: 283, abroadCourseId: 1
     }
     /* existing eTeacher student: attach this order to their member ID instead of creating a new member */
     try { var _m = sessionStorage.getItem('lla_member_id') || ''; if (/^[1-9]\d{5,9}$/.test(_m)) payload.StudentId = Number(_m); } catch (e) {}
+    /* guest access code: free seat, so the CRM order is opened at 0 with nothing left to pay (same fields the Blueprint VIP add-on uses) */
+    try { if (/guest access, 100%/.test(String(fields.promoCode || ''))) { payload.FirstPayment = 0; payload.NumberOfPayments = 0; payload.LeftToPay = 0; } } catch (e) {}
     return { payload: payload };
   }
 
