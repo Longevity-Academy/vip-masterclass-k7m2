@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>/* existing-student link: ?member=<CRM member ID> */(function(){try{var m=/(?:^|[?&])member=([1-9]\d{5,9})(?:&|$)/.exec(location.search);if(m)sessionStorage.setItem("lla_member_id",m[1]);}catch(e){}})();</script>
 <script>/* campaign-only page: default CRM campaign 118853 when the link carries no cid */(function(){try{if(!/(?:^|[?&])cid=[1-9]\d*(?:&|$)/.test(location.search)){var s=location.search;s=(s&&s.length>1?s+"&":"?")+"cid=118853";history.replaceState(null,"",location.pathname+s+location.hash);}}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2552,6 +2553,8 @@ window.LLA_ECOMM_CONFIG.crmCourse = { mainAbroadCourseId: 283, abroadCourseId: 1
       window.JulieInternationalCheckout.applyPayload(payload, buyer);
       window.JuliePaymentSafety.applyPrice(payload, window.LLA_PLAN.get().id);
     }
+    /* existing eTeacher student: attach this order to their member ID instead of creating a new member */
+    try { var _m = sessionStorage.getItem('lla_member_id') || ''; if (/^[1-9]\d{5,9}$/.test(_m)) payload.StudentId = Number(_m); } catch (e) {}
     return { payload: payload };
   }
 
