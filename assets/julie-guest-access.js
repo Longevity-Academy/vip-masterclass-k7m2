@@ -46,6 +46,22 @@
     try { var s3 = $('ckSt3'); if (s3) s3.classList.add('done'); var b2 = $('ckBar2'); if (b2) b2.classList.add('done'); } catch (e) {}
     try { window.LLA_AC && LLA_AC.send && LLA_AC.send('LGV_Guest_Access_Registered'); } catch (e) {}
   }
+  /* A free seat has no payment report, so the class is assigned here (same CRM call the
+   * French Atelier $0 course orders use): StudentID + OrderID + class -> Students/ProfileInfo. */
+  function assignClass(ids) {
+    if (!ids || !ids.stid || !ids.orderid) return Promise.reject(new Error('no_ids'));
+    var cfg = LLA_ECOMM.config || {};
+    var base = String(cfg.workerBase || '').replace(/\/$/, '') + (cfg.env === 'staging' ? '/staging' : '');
+    var cls = LLA_ECOMM.classForSession((($('emDate') || {}).value) || '');
+    var body = { StudentID: Number(ids.stid), OrderID: Number(ids.orderid), SecondaryCourseID: Number(cls.courseId),
+                 AssignNotes: 'Guest access code, free seat, Longevity Masterclass' };
+    function go(left) {
+      return fetch(base + '/api/checkout/assign', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+        .then(function (r) { if (r.ok || r.status === 204) return true; throw new Error('assign_' + r.status); })
+        .catch(function (e) { if (left > 0) return new Promise(function (res) { setTimeout(res, 1500); }).then(function () { return go(left - 1); }); throw e; });
+    }
+    return go(2);
+  }
   var busy = false;
   document.addEventListener('click', function (ev) {
     var t = ev.target && ev.target.closest ? ev.target.closest('#emApply, #emGo2') : null;
@@ -71,7 +87,8 @@
     busy = true; t.disabled = true; t.textContent = 'Confirming your seat…';
     LLA_ECOMM.submitLead(f).then(function (r) {
       if (!r || !r.ok) throw new Error('order_failed');
-      finish(LLA_ECOMM.getCheckoutIds() || {});
+      var ids = LLA_ECOMM.getCheckoutIds() || {};
+      return assignClass(ids).then(function () { finish(ids); });
     }).catch(function () {
       setErr('We could not confirm your registration. Please contact advisor@longevitylifeacademy.com.');
     }).finally(function () { busy = false; t.disabled = false; reflect(); });
