@@ -2557,6 +2557,8 @@ window.LLA_ECOMM_CONFIG.crmCourse = { mainAbroadCourseId: 283, abroadCourseId: 1
     try { var _m = sessionStorage.getItem('lla_member_id') || ''; if (/^[1-9]\d{5,9}$/.test(_m)) payload.StudentId = Number(_m); } catch (e) {}
     /* guest access code: free seat, so the CRM order is opened at 0 with nothing left to pay (same fields the Blueprint VIP add-on uses) */
     try { if (/guest access, 100%/.test(String(fields.promoCode || ''))) { payload.FirstPayment = 0; payload.NumberOfPayments = 0; payload.LeftToPay = 0; payload.DiscountPercent = 100; delete payload.DiscountReason; } } catch (e) {}
+    /* the invitation key stays out of the CRM record */
+    try { ['QueryString','LandingPage','DynamicParameters'].forEach(function (k) { if (typeof payload[k] === 'string') payload[k] = payload[k].replace(/([?&])g=[A-Za-z0-9]{6,40}(&|$)/, function (m, a, b) { return b ? a : ''; }); }); } catch (e) {}
     return { payload: payload };
   }
 
@@ -2576,7 +2578,8 @@ window.LLA_ECOMM_CONFIG.crmCourse = { mainAbroadCourseId: 283, abroadCourseId: 1
       var base = CFG.workerBase.replace(/\/$/, '');
       if (CFG.mode === 'ecomm') {
         var prefix = CFG.env === 'staging' ? '/staging' : '';
-        return postWithRetry(base + prefix + '/api/lead/ecomm', built.payload).then(function(r){
+        /* free guest orders are sent once only: a timed-out request may already have opened the order, so it is never replayed */
+        return postWithRetry(base + prefix + '/api/lead/ecomm', built.payload, /guest access, 100%/.test(String(fields.promoCode || '')) ? 3 : 1).then(function(r){
           var bb = (r && r.body) || {};
           var stid = bb.stid || bb.StudentId || bb.studentId || bb.StudentID || '';
           var orderid = bb.orderid || bb.OrderId || bb.orderId || bb.OrderID || '';

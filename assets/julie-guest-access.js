@@ -79,6 +79,16 @@
       setInterval(function () { if (active) reflect(); }, 400);
     });
   })();
+  /* One order per person: what this browser already sent is remembered per member ID
+   * (or per email when there is no member link). */
+  var REC = 'lla_guest_orders_v1';
+  function recKey(f) {
+    var m = ''; try { m = sessionStorage.getItem('lla_member_id') || ''; } catch (e) {}
+    return m ? 'm:' + m : 'e:' + String(f.email || '').trim().toLowerCase();
+  }
+  function recAll() { try { return JSON.parse(localStorage.getItem(REC) || '{}') || {}; } catch (e) { return {}; } }
+  function recGet(k) { return recAll()[k] || null; }
+  function recSet(k, v) { try { var o = recAll(); if (v) { v.ts = Date.now(); o[k] = v; } else delete o[k]; localStorage.setItem(REC, JSON.stringify(o)); } catch (e) {} }
   var busy = false;
   document.addEventListener('click', function (ev) {
     var t = ev.target && ev.target.closest ? ev.target.closest('#emApply, #emGo2') : null;
@@ -102,12 +112,32 @@
     if (!v.ok) { setErr('Please check your details.'); return; }
     f.phone = v.phone;
     busy = true; t.disabled = true; t.textContent = 'Confirming your seat…';
-    LLA_ECOMM.submitLead(f).then(function (r) {
-      if (!r || !r.ok) throw new Error('order_failed');
-      var ids = LLA_ECOMM.getCheckoutIds() || {};
-      return assignClass(ids).then(function () { finish(ids); });
-    }).catch(function () {
-      setErr('We could not confirm your registration. Please contact advisor@longevitylifeacademy.com.');
+    var key = recKey(f), prev = recGet(key), work;
+    if (prev && prev.orderid) {
+      /* the order already exists: only finish the class assignment, never open a second order */
+      work = (prev.assigned ? Promise.resolve() : assignClass(prev).then(function () { recSet(key, { stid: prev.stid, orderid: prev.orderid, assigned: true }); }))
+        .then(function () { finish(prev); });
+    } else if (prev && prev.attempted) {
+      work = Promise.reject(new Error('unconfirmed_attempt'));
+    } else {
+      recSet(key, { attempted: true });
+      work = LLA_ECOMM.submitLead(f).then(function (r) {
+        if (!r || !r.ok) {
+          if (r && r.status >= 400 && r.status < 500) recSet(key, null); /* rejected, nothing was created */
+          throw new Error('order_failed');
+        }
+        var ids = LLA_ECOMM.getCheckoutIds() || {};
+        recSet(key, { stid: String(ids.stid), orderid: String(ids.orderid), assigned: false });
+        return assignClass(ids).then(function () {
+          recSet(key, { stid: String(ids.stid), orderid: String(ids.orderid), assigned: true });
+          finish(ids);
+        });
+      });
+    }
+    work.catch(function (e) {
+      setErr(e && e.message === 'unconfirmed_attempt'
+        ? 'Your registration may already be in. Please do not submit again. Contact advisor@longevitylifeacademy.com and we will confirm your seat.'
+        : 'We could not confirm your registration. Please contact advisor@longevitylifeacademy.com.');
     }).finally(function () { busy = false; t.disabled = false; reflect(); });
   }, true);
   document.addEventListener('input', function (ev) {
