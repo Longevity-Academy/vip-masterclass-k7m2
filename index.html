@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <script src="assets/campaign-access.js?v=20261111-restricted2"></script>
-<script>/* Use only this invitation's member ID, never one left by a different visitor. */(function(){try{var p=new URLSearchParams(location.search),v=p.getAll('member');sessionStorage.removeItem('lla_member_id');if(v.length===1&&/^[1-9]\d{5,9}$/.test(v[0]))sessionStorage.setItem('lla_member_id',v[0]);}catch(e){}})();</script>
+<script>/* existing-student link: ?member=<CRM member ID> */(function(){try{var m=/(?:^|[?&])member=([1-9]\d{5,9})(?:&|$)/.exec(location.search);if(m)sessionStorage.setItem("lla_member_id",m[1]);}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
@@ -2592,7 +2592,6 @@ window.LLA_ECOMM_CONFIG.crmCourse = { mainAbroadCourseId: 283, abroadCourseId: 1
           var stid = bb.stid || bb.StudentId || bb.studentId || bb.StudentID || '';
           var orderid = bb.orderid || bb.OrderId || bb.orderId || bb.OrderID || '';
           if (r.ok && stid && orderid) {
-            if (built.payload.StudentId && String(stid) !== String(built.payload.StudentId)) return { ok: false, status: r.status, error: 'member_identity_mismatch' };
             try { sessionStorage.setItem('julie_ecomm_ids', JSON.stringify({ stid: String(stid), orderid: String(orderid), plan: submittedPlan, env: CFG.env, ts: Date.now() })); } catch(e){}
           }
           if (r.ok && (!stid || !orderid)) return { ok: false, status: r.status, error: 'missing_order_identity' };
