@@ -2580,9 +2580,6 @@ window.LLA_ECOMM_CONFIG.crmCourse = { mainAbroadCourseId: 283, abroadCourseId: 1
     submitLead: function(fields){
       if (!window.LLA_CAMPAIGN_ACCESS || !window.LLA_CAMPAIGN_ACCESS.allowed)
         return Promise.resolve({ ok: false, status: 403, error: 'campaign_not_allowed' });
-      var member = new URLSearchParams(location.search).getAll('member');
-      if (member.length !== 1 || !/^[1-9]\d{5,9}$/.test(member[0]))
-        return Promise.resolve({ ok: false, status: 403, error: 'member_invitation_required' });
       var built = buildLeadPayload(fields);
       if (built.error) return Promise.resolve({ ok: false, status: 0, error: built.error, reason: built.reason });
       var submittedPlan = window.LLA_PLAN.get().id;
@@ -2595,7 +2592,7 @@ window.LLA_ECOMM_CONFIG.crmCourse = { mainAbroadCourseId: 283, abroadCourseId: 1
           var stid = bb.stid || bb.StudentId || bb.studentId || bb.StudentID || '';
           var orderid = bb.orderid || bb.OrderId || bb.orderId || bb.OrderID || '';
           if (r.ok && stid && orderid) {
-            if (String(stid) !== String(built.payload.StudentId)) return { ok: false, status: r.status, error: 'member_identity_mismatch' };
+            if (built.payload.StudentId && String(stid) !== String(built.payload.StudentId)) return { ok: false, status: r.status, error: 'member_identity_mismatch' };
             try { sessionStorage.setItem('julie_ecomm_ids', JSON.stringify({ stid: String(stid), orderid: String(orderid), plan: submittedPlan, env: CFG.env, ts: Date.now() })); } catch(e){}
           }
           if (r.ok && (!stid || !orderid)) return { ok: false, status: r.status, error: 'missing_order_identity' };
@@ -3712,6 +3709,6 @@ document.addEventListener('click',function(e){
 },true);
 </script>
 <script>(function(){var g=document.querySelector(".v8-pressgrid");if(!g)return;document.querySelectorAll(".v8-press-btn").forEach(function(b){b.addEventListener("click",function(){var c=g.querySelector(".dv-lla-news-card");var w=c?c.getBoundingClientRect().width+28:420;g.scrollBy({left:w*parseInt(b.dataset.dir,10),behavior:"smooth"})})})})();</script>
-<script src="assets/julie-guest-access.js?v=20261111-restricted1" defer></script>
+<script src="assets/julie-guest-access.js?v=20261111-restore-submit" defer></script>
 </body>
 </html>
