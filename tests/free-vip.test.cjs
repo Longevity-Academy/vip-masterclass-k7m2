@@ -149,14 +149,14 @@ test('paid-mode fallback still prices Standard at49 and VIP at79', async () => {
   assert.equal(h.requests[1].body.FirstPayment, 79);
   assert.equal(h.requests[1].body.DiscountPercent, undefined);
 });
-test('missing personal member invitation cannot create a new member or order', async () => {
+test('campaign invitation without member parameter retains the original registration flow', async () => {
   const h = harness({ search: '?cid=118853' }); h.guest();
   await h.click('emGo2');
-  assert.equal(h.requests.length, 0);
-  assert.match(h.element('emErr2').textContent, /personal invitation/);
-  const result = await h.ctx.LLA_ECOMM.submitLead(h.fields);
-  assert.equal(result.error, 'member_invitation_required');
-  assert.equal(h.requests.length, 0);
+  assert.equal(h.requests.length, 2);
+  assert.equal(h.requests[0].body.StudentId, undefined);
+  assert.equal(h.requests[0].body.DiscountPercent, 100);
+  assert.equal(h.requests[1].body.StudentID, 1234567);
+  assert.equal(h.element('ckDone').style.display, 'block');
 });
 test('unapproved campaign cannot create an order', async () => {
   const h = harness(); h.ctx.LLA_CAMPAIGN_ACCESS.allowed = false; h.guest();
