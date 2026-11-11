@@ -12,7 +12,7 @@ function storage() {
   const data = new Map();
   return { getItem: k => data.get(k) || null, setItem: (k, v) => data.set(k, String(v)), removeItem: k => data.delete(k) };
 }
-function harness({ dedicated = true, failOrder = false, failAssign = false, search = '' } = {}) {
+function harness({ dedicated = true, failOrder = false, failAssign = false, search = '?cid=118853&member=1234567' } = {}) {
   const elements = new Map(), events = {}, requests = [], ac = [];
   function element(id) {
     if (!elements.has(id)) {
@@ -33,6 +33,7 @@ function harness({ dedicated = true, failOrder = false, failAssign = false, sear
     setInterval: () => 0, setTimeout: fn => { fn(); return 0; },
     JulieInternationalCheckout: { personal: () => ({ e164: '+12125550123', stateCode: 'NY' }), applyPayload: () => {} },
     LLA_AC: { send: name => ac.push(name) },
+    LLA_CAMPAIGN_ACCESS: { allowed: true, cid: '118853' },
     fetch: async (url, options) => {
       requests.push({ url, body: JSON.parse(options.body) });
       if (url.endsWith('/api/lead/ecomm')) {
@@ -44,6 +45,8 @@ function harness({ dedicated = true, failOrder = false, failAssign = false, sear
     }
   };
   ctx.window = ctx;
+  const invitedMember = new URLSearchParams(search).get('member');
+  if (invitedMember) ctx.sessionStorage.setItem('lla_member_id', invitedMember);
   vm.createContext(ctx);
   vm.runInContext(planScript.replace('window.JULIE_FREE_VIP = true;', 'window.JULIE_FREE_VIP = ' + dedicated + ';'), ctx);
   vm.runInContext(fs.readFileSync(require('node:path').join(__dirname, '../assets/julie-payment-safety.js'), 'utf8'), ctx);
@@ -84,6 +87,7 @@ test('real zero-dollar order DTO, 100% discount metadata and Nov14 identity', as
   assert.equal(p.NumberOfPayments, 0);
   assert.equal(p.LeftToPay, 0);
   assert.equal(p.DiscountPercent, 100);
+  assert.equal(p.StudentId, 1234567);
   assert.equal(p.MainAbroadCourseId, 283);
   assert.equal(p.AbroadCourseId, 1823);
   assert.equal(p.PreferredCourseId, 170142);
@@ -128,7 +132,7 @@ test('failed class assignment cannot show registration confirmed', async () => {
   assert.match(h.element('emErr2').textContent, /could not confirm/);
 });
 test('staging remains isolated and all requests are mocked', async () => {
-  const h = harness({ search: '?env=staging&utm_source=offline' }); h.guest();
+  const h = harness({ search: '?env=staging&utm_source=offline&cid=118853&member=1234567' }); h.guest();
   await h.click('emGo2');
   assert.equal(h.requests.length, 2);
   for (const request of h.requests) assert.match(request.url, /\/staging\/api\//);
@@ -144,4 +148,20 @@ test('paid-mode fallback still prices Standard at49 and VIP at79', async () => {
   await h.ctx.LLA_ECOMM.submitLead(h.fields);
   assert.equal(h.requests[1].body.FirstPayment, 79);
   assert.equal(h.requests[1].body.DiscountPercent, undefined);
+});
+test('missing personal member invitation cannot create a new member or order', async () => {
+  const h = harness({ search: '?cid=118853' }); h.guest();
+  await h.click('emGo2');
+  assert.equal(h.requests.length, 0);
+  assert.match(h.element('emErr2').textContent, /personal invitation/);
+  const result = await h.ctx.LLA_ECOMM.submitLead(h.fields);
+  assert.equal(result.error, 'member_invitation_required');
+  assert.equal(h.requests.length, 0);
+});
+test('unapproved campaign cannot create an order', async () => {
+  const h = harness(); h.ctx.LLA_CAMPAIGN_ACCESS.allowed = false; h.guest();
+  await h.click('emGo2');
+  assert.equal(h.requests.length, 0);
+  const result = await h.ctx.LLA_ECOMM.submitLead(h.fields);
+  assert.equal(result.error, 'campaign_not_allowed');
 });

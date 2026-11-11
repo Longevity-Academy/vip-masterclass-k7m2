@@ -130,6 +130,9 @@
     if (busy) return;
     var f = fields(), e2 = $('emErr2'); e2.textContent = ''; e2.classList.remove('on');
     if (!window.LLA_ECOMM) { setErr('Something went wrong, please refresh and try again.'); return; }
+    if (!window.LLA_CAMPAIGN_ACCESS || !window.LLA_CAMPAIGN_ACCESS.allowed) { setErr('Please use the approved campaign link in your invitation email.'); return; }
+    var members = new URLSearchParams(location.search).getAll('member');
+    if (members.length !== 1 || !/^[1-9]\d{5,9}$/.test(members[0])) { setErr('Please use your personal invitation link so we can add the masterclass to your existing member record. No new member or order has been created.'); return; }
     var v = LLA_ECOMM.validateLead(f);
     if (!v.ok) { setErr('Please check your details.'); return; }
     f.phone = v.phone;
