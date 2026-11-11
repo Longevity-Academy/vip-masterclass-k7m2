@@ -6,7 +6,8 @@
   'use strict';
   var HASHES = ['e74dc39609ebb5ece7a9f1af4bfc3cfbec7627f0c9588958b099986292073374'];
   var EXPIRES_AT = Date.UTC(2026, 10, 15, 21, 59, 59); /* 2026-11-15 23:59:59 Israel */
-  var active = '';
+  var dedicatedVIP = window.JULIE_FREE_VIP === true;
+  var active = dedicatedVIP ? 'GUESTLIST' : '';
   function $(id) { return document.getElementById(id); }
   function norm(v) { return String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
   function sha256(s) {
@@ -26,9 +27,13 @@
   function reflect() {
     var tu = $('emTuition'), go = $('emGo2'), ap = $('emApply');
     if (active) {
-      if (tu) tu.textContent = '$0.00 · Guest access';
+      if (tu) tu.textContent = dedicatedVIP ? '$0.00 · FREE VIP access' : '$0.00 · Guest access';
       if (go) go.textContent = 'Complete registration';
       if (ap) ap.textContent = 'Applied';
+      if (dedicatedVIP) {
+        if ($('checkoutPackageTitle')) $('checkoutPackageTitle').textContent = 'FREE VIP Masterclass Access';
+        if ($('checkoutPackageSummary')) $('checkoutPackageSummary').textContent = '$0 / 60-minute class + 30-minute private Q&A';
+      }
     }
   }
   function finish(ids) {
@@ -36,7 +41,7 @@
     var plan = (window.LLA_PLAN && LLA_PLAN.get && LLA_PLAN.get()) || {};
     var h = done.querySelector('h1'), ps = done.querySelectorAll('p');
     if (h) h.textContent = 'Registration confirmed';
-    if (ps[0]) ps[0].textContent = 'Your guest seat for the Longevity Masterclass with Julie Gibson Clark is reserved. No payment is due. Your Zoom access details will be sent to ' + $('emEmail').value + ' before the session.';
+    if (ps[0]) ps[0].textContent = 'Your ' + (dedicatedVIP ? 'FREE VIP' : 'guest') + ' seat for the Longevity Masterclass with Julie Gibson Clark is reserved. No payment is due. Your Zoom access details will be sent to ' + $('emEmail').value + ' before the session.';
     var ref = $('ckReceiptReference');
     if (ref) ref.textContent = 'Order #' + (ids.orderid || '') + ' · ' + (plan.course_name || 'Longevity Masterclass') + ' · ' + ($('emDate') || {}).value;
     try { if (ref && sessionStorage.getItem('lla_member_id') && ids.stid) ref.textContent += ' · Member ID ' + ids.stid; } catch (e) {}
@@ -52,9 +57,9 @@
     if (!ids || !ids.stid || !ids.orderid) return Promise.reject(new Error('no_ids'));
     var cfg = LLA_ECOMM.config || {};
     var base = String(cfg.workerBase || '').replace(/\/$/, '') + (cfg.env === 'staging' ? '/staging' : '');
-    var cls = LLA_ECOMM.classForSession((($('emDate') || {}).value) || '');
+    var cls = dedicatedVIP ? { courseId: 170142, semesterId: 2394 } : LLA_ECOMM.classForSession((($('emDate') || {}).value) || '');
     var body = { StudentID: Number(ids.stid), OrderID: Number(ids.orderid), SecondaryCourseID: Number(cls.courseId),
-                 AssignNotes: 'Guest access code, free seat, Longevity Masterclass' };
+                 AssignNotes: dedicatedVIP ? 'FREE VIP customer invitation, 100 percent discount, Longevity Masterclass' : 'Guest access code, free seat, Longevity Masterclass' };
     function go(left) {
       return fetch(base + '/api/checkout/assign', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
         .then(function (r) { if (r.ok || r.status === 204) return true; throw new Error('assign_' + r.status); })
@@ -66,6 +71,22 @@
    * access by itself, so no code is shown or typed. Kept for this browser tab only. */
   var LINK_HASHES = ['914d6f92b2584c6ed280ee91884ff70aa17809448de5c43a4aa24b41b63c1778'];
   (function () {
+    if (dedicatedVIP) {
+      if (window.LLA_PLAN) {
+        var applyPlan = window.LLA_PLAN.apply;
+        window.LLA_PLAN.apply = function () {
+          var result = applyPlan.apply(this, arguments);
+          reflect();
+          return result;
+        };
+        window.LLA_PLAN.apply('vip');
+      }
+      var promo = $('emPromo');
+      if (promo) { promo.value = 'GUESTLIST'; promo.readOnly = true; }
+      reflect();
+      setInterval(reflect, 400);
+      return;
+    }
     var tok = '';
     try {
       var m = /(?:^|[?&])g=([A-Za-z0-9]{6,40})(?:&|$)/.exec(location.search);
@@ -94,6 +115,7 @@
     var t = ev.target && ev.target.closest ? ev.target.closest('#emApply, #emGo2') : null;
     if (!t) return;
     if (t.id === 'emApply') {
+      if (dedicatedVIP) { ev.stopPropagation(); ev.preventDefault(); reflect(); return; }
       var code = norm($('emPromo').value);
       if (!code) return;
       ev.stopPropagation(); ev.preventDefault();
@@ -141,7 +163,7 @@
     }).finally(function () { busy = false; t.disabled = false; reflect(); });
   }, true);
   document.addEventListener('input', function (ev) {
-    if (ev.target && ev.target.id === 'emPromo' && active && norm(ev.target.value) !== active) {
+    if (!dedicatedVIP && ev.target && ev.target.id === 'emPromo' && active && norm(ev.target.value) !== active) {
       active = ''; var ap = $('emApply'); if (ap) ap.textContent = 'Apply';
       var go = $('emGo2'); if (go) go.textContent = 'Continue to payment';
       var tu = $('emTuition'), p = (window.LLA_PLAN && LLA_PLAN.get && LLA_PLAN.get()) || {};
